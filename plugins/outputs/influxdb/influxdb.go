@@ -184,11 +184,16 @@ func (i *InfluxDB) Description() string {
 // occurs, logging each unsuccessful. If all servers fail, return error.
 func (i *InfluxDB) Write(metrics []telegraf.Metric) error {
 	r := metric.NewReader(metrics)
-
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(r)
+	s := buf.String()
+	fmt.Print("sample metric result:")
+	fmt.Println(s)
 	// This will get set to nil if a successful write occurs
 	err := fmt.Errorf("Could not write to any InfluxDB server in cluster")
-
+	fmt.Println("pppppppppp:")
 	p := rand.Perm(len(i.clients))
+	fmt.Println(p)
 	for _, n := range p {
 		if e := i.clients[n].WriteStream(r); e != nil {
 			// If the database was not found, try to recreate it:
